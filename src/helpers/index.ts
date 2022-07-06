@@ -1,5 +1,5 @@
 import { makeRandomText } from "./makeRandomText";
 import { factorialInteractive, factorialRecursive } from "./factorial";
-import { fibonnaci } from "./fibonnaci";
+import { fibonacci } from "./fibonnaci";
 
-export { makeRandomText, factorialInteractive, factorialRecursive, fibonnaci };
+export { makeRandomText, factorialInteractive, factorialRecursive, fibonacci };

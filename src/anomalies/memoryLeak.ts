@@ -1,4 +1,6 @@
-import { factorialRecursive, makeRandomText, fibonnaci } from "@src/helpers";
+import path from "path";
+import { execSync } from "child_process";
+import { factorialRecursive, makeRandomText } from "../helpers";
 
 const memoryLeak = (size: number, times: number = 1): number => {
   const length = factorialRecursive(size);
@@ -17,4 +19,26 @@ const memoryLeak = (size: number, times: number = 1): number => {
   return length;
 };
 
-export { memoryLeak };
+export interface MemoryAnomalyConfig {
+  increaseMode: "fast" | "slow" | "instant";
+  durationOfAlocation: number;
+  targetAlocation: number;
+  increaseRate: number;
+}
+
+const memoryUsage = async (params: MemoryAnomalyConfig) => {
+  const FILE_PATH = path.join(__dirname, "../scripts/memory.c");
+  const executableFile = "memory.out";
+  const { targetAlocation, increaseMode, increaseRate, durationOfAlocation } =
+    params;
+  const command = `gcc ${FILE_PATH} -o ${executableFile} && ./${executableFile} ${targetAlocation} ${increaseMode} ${increaseRate} ${durationOfAlocation}`;
+
+  try {
+    const stdout = execSync(command);
+    const result = stdout.toString();
+  } catch (error) {}
+
+  return 1;
+};
+
+export { memoryLeak, memoryUsage };

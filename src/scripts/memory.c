@@ -7,32 +7,46 @@
 
 int main(int argc, char *argv[])
 {
-    unsigned long int mem_size = KB * KB * KB;
-    // alocano 1 gb de memoria
 
-    printf("MEMSIZE: %lu\n", mem_size);
-    printf("SIZE OF: void*:%lu\n", sizeof(void*));
-    printf("SIZE OF: char*:%lu\n", sizeof(char*));
-    void *based = malloc(mem_size);  //mem_size = 1024^3
-    if (based) {
-        printf("Allocated %zu Bytes from %p to %p\n", mem_size, based, based + mem_size);
-    } else {
+    if (argc < 5 || argc > 5)
+    {
+        printf("No argument passed through command line.\n");
+        printf("usage is: mem_size mode rate alocation_time");
+        return 1;
+    }
+    unsigned long int mem_size = atoi(argv[1]);
+    char *mode = argv[2];
+    int stage = atoi(argv[3]);
+
+    void *based = malloc(mem_size);
+
+    if (!based)
+    {
         printf("Error in allocation.\n");
         return 1;
     }
-    int initialized = 0;
-    int stage = 65536;
-    // memset((char *)based, '$', mem_size); // alocando de maneira automatica
-    while (initialized < mem_size) {  //initialize it in batches
-        //printf("%6d %p-%p\n", n, based+initialized, based+initialized+stage);
-        memset((char *)based + initialized, '$', stage);
-        initialized += stage;
-        // passo a passo
-        usleep(1000);
+
+    if (strcmp(mode, "instant") == 0)
+    {
+        printf("alocando de maneira automatica\n");
+        memset((char *)based, '$', mem_size);
     }
+    else
+    {
+        int initialized = 0;
+        int sleep_miliseconds = strcmp(mode, "fast") == 0 ? 500 : 1000;
+        printf("alocando memoria gradualmente\n");
+        while (initialized < atoi(argv[1]))
+        {
+            memset((char *)based + initialized, '$', stage);
+            initialized += stage;
+            usleep(sleep_miliseconds);
+        }
+    }
+
     // espera antes de finalizar rotina
-    sleep(5);
+    sleep(atoi(argv[4]));
     free(based);
 
-    return 0;
+    // return 0;
 }

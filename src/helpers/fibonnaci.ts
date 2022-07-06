@@ -1,4 +1,4 @@
-const fibonnaci = (nth: number) => {
+const fibonacci = (nth: number) => {
   let x = 0;
   let y = 1;
 
@@ -11,4 +11,4 @@ const fibonnaci = (nth: number) => {
   return y;
 };
 
-export { fibonnaci };
+export { fibonacci };
